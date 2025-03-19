@@ -1,0 +1,61 @@
+services:
+
+  laravel:
+    container_name: zigma-auth-app
+    build: .
+    restart: unless-stopped
+    volumes:
+      - ./zigma-auth-data:/var/www
+    ports:
+      - 8000:80
+      - '${HMR_PORT:-5173}:5173'
+    depends_on:
+      - mysql_db
+      - redis
+    environment:
+      CACHE_DRIVER: redis
+      SESSION_DRIVER: redis
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+
+  mysql_db:
+    image: mysql:8.4
+    container_name: zigma-auth-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: zigma_auth_db_root
+      MYSQL_DATABASE: zigma_auth_db
+      MYSQL_USER: zigma_user
+      MYSQL_PASSWORD: zigma_password
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  redis:
+    image: redis:7.2
+    container_name: zigma-redis
+    restart: unless-stopped
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_data:/data
+
+  phpmyadmin:
+    image: phpmyadmin:5.2
+    container_name: zigma-phpmyadmin
+    restart: unless-stopped
+    ports:
+      - 9001:80
+    environment:
+      PMA_HOST: mysql_db
+      PMA_USER: zigma_user
+      PMA_PASSWORD: zigma_password
+      PMA_ARBITRARY: 1
+    depends_on:
+      - mysql_db
+
+volumes:
+  zigma-auth-data:
+  mysql_data:
+  redis_data:
