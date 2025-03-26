@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use Illuminate\Support\Str;
 
 class RegisteredUserController extends Controller
 {
@@ -30,22 +31,34 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'role' => ['required'],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        // Generate UUID
+        // $uuid = Str::uuid();
+
         $user = User::create([
+            // 'uuid' => $uuid,
             'name' => $request->name,
             'email' => $request->email,
+            'role' => $request->roles,
+            'admin' => '1',
+            'block' => '0',
             'password' => Hash::make($request->password),
         ]);
 
-        event(new Registered($user));
+         // event(new Registered($user));
 
-        Auth::login($user);
+          return redirect('/dashboard');
 
-        return redirect(RouteServiceProvider::HOME);
+          // Auth::login($user);
+
+          // return redirect(RouteServiceProvider::HOME);
     }
 }

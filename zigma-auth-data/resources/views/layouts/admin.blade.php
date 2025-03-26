@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ config('app.name', 'Zigma App') }}</title>
 
          <!-- plugins:css -->
         <link rel="stylesheet" href="{{ asset('admin/assets/vendors/feather/feather.css') }}">
@@ -24,7 +24,7 @@
         <!-- inject:css -->
         <link rel="stylesheet" href="{{ asset('admin/assets/css/style.css') }} ">
         <!-- endinject -->
-        <link rel="shortcut icon" href="{{ asset('admin/assets/images/favicon.png') }} " />
+        {{-- <link rel="shortcut icon" href="{{ asset('admin/assets/images/favicon.png') }} " /> --}}
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
